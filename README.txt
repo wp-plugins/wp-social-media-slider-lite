@@ -11,7 +11,7 @@ Easily display your latest Twitter posts in a responsive slider.
 
 == Description ==
 
-WP Social Media Slider Lite is a simple and stylish plugin that displays your tweets in a slider. It will help to make sure that your social media posts get the largest audience they can.
+WP Social Media Slider Lite is a simple and stylish plugin that displays your tweets in a slider. If you'd like, you can check out the [official WP Social Media Slider website](http://wpsocialmediaslider.com).
 
 **FEATURES**
 

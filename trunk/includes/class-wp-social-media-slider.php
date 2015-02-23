@@ -94,7 +94,7 @@ class WP_Social_Media_Slider {
 	public function __construct() {
 
 		$this->plugin_name = 'wp-social-media-slider';
-		$this->version = '1.0.4';
+		$this->version = '1.0.5';
 		$this->settings = $this->set_default_settings( get_option('wpsms_settings', array() ) );
 
 		$this->load_dependencies();
@@ -212,9 +212,6 @@ class WP_Social_Media_Slider {
 		 * The main object class for social media posts.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-social-media-slider-post.php';
-
-
-		require plugin_dir_path( dirname( __FILE__ ) ) . 'includes/plugin-update-checker/plugin-update-checker.php';
 
 	}
 

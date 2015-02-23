@@ -35,6 +35,13 @@
 		<div class="activation-form update-nag">
 			<p>To unlock Facebook and Instagram, please <a href="http://wpsocialmediaslider.com" target="_blank">purchase the full version</a> of WP Social Media Slider.</p>
 		</div>
+	<?php  if ( !function_exists('curl_version') ) : ?>
+		<div class="error">
+			<p>Please <a href='http://wpsocialmediaslider.com/docs#troubleshooting' target='_blank'>enable the Curl PHP extension</a> on your server.</p>
+		</div>
+	<?php endif; ?>
+
+
 	</div>
 
 	<form method="post" action="options.php" enctype="multipart/form-data">

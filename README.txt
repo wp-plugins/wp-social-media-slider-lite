@@ -11,9 +11,7 @@ Easily display your latest Twitter posts in a responsive slider.
 
 == Description ==
 
-WP Social Media Slider Lite is a simple and stylish plugin that displays your tweets in a slider. If you'd like, you can check out the [official WP Social Media Slider website](http://wpsocialmediaslider.com).
-
-**FEATURES**
+WP Social Media Slider Lite is a simple and stylish plugin that displays your tweets in a slider. You can learn more about it by checking out the [official WP Social Media Slider website](http://wpsocialmediaslider.com).
 
  - Fully responsive
  - Lazy loading to speed up page loads
@@ -29,7 +27,7 @@ If you're more of a Facebook or Instagram user--or if you use all three--[upgrad
 We'd be happy to hear any feature requests that you have for this slider! Simply [shoot us a note](http://wpsocialmediaslider.com/#contact-us)!
 
 ### Troubleshooting
-Is something broken? Let us know (by posting in the support forum here)! We'd like to do what we can to ensure that our plugin works great for as many people as possible!
+Is something broken? Let us know (by posting in the support forum here)! We'd like to do what we can to ensure that our plugin works great for as many people as possible! There's also some [troubleshooting information](http://wpsocialmediaslider.com/docs#troubleshooting) on our documentation page.
 
 == Installation ==
 
@@ -66,6 +64,10 @@ Ordinarily, connecting plugins like this to Twitter can be a real pain. In order
 2. /assets/screenshot-2.png
 
 == Changelog ==
+
+
+= 1.0.4 =
+* Added a notification when Curl is not enabled.
 
 = 1.0.3 =
 * The first stable release.

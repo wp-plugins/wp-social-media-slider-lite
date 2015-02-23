@@ -94,7 +94,7 @@ class WP_Social_Media_Slider {
 	public function __construct() {
 
 		$this->plugin_name = 'wp-social-media-slider';
-		$this->version = '1.0.3';
+		$this->version = '1.0.4';
 		$this->settings = $this->set_default_settings( get_option('wpsms_settings', array() ) );
 
 		$this->load_dependencies();

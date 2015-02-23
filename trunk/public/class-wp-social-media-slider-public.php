@@ -86,9 +86,13 @@ class WP_Social_Media_Slider_Public {
 
 	public function display_wp_social_media_slider() {
 
-		ob_start();
-			include_once( 'partials/wp-social-media-slider-lazy-loader.php' );
-		$str = ob_get_clean();
+		if ( function_exists('curl_version') ) {
+			ob_start();
+				include_once( 'partials/wp-social-media-slider-lazy-loader.php' );
+			$str = ob_get_clean();			
+		} else {
+			$str = "Please <a href='http://wpsocialmediaslider.com/docs#troubleshooting' target='_blank'>enable the Curl PHP extension</a> on your server.";
+		}
 
 		return $str;
 	}

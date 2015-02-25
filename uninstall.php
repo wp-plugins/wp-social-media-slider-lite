@@ -22,7 +22,7 @@
  * @link       http://example.com
  * @since      0.9.1
  *
- * @package    WP_Social_Media_Slider
+ * @package    Wpsms
  */
 
 // If uninstall not called from WordPress, then exit.

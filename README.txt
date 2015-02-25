@@ -1,9 +1,9 @@
-﻿=== WP Social Media Slider Lite ===
+=== WP Social Media Slider Lite ===
 Contributors: laternastudio
 Tags: social, feed, slider, social media, facebook, twitter, instagram, latest tweets
 Requires at least: 3.0.1
 Tested up to: 4.1
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,9 +65,15 @@ Ordinarily, connecting plugins like this to Twitter can be a real pain. In order
 
 == Changelog ==
 
+= 1.0.6 =
+* Refactored much of the code in favor of a more modular approach.
 
 = 1.0.4 =
 * Added a notification when Curl is not enabled.
 
 = 1.0.3 =
 * The first stable release.
+
+== Upgrade Notice ==
+= 1.0.6 =
+In version 1.0.6 we refactored much of the code and changed some of the setting id's. Because of this, you will likely need to re-enter the information on your WP Social Media Slider settings page.

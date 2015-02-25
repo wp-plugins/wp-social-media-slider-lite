@@ -1,27 +1,19 @@
 <?php
 
 /**
- * The main object class for posts
- *
- * @link       http://example.com
- * @since      0.9.1
- *
- * @package    WP_Social_Media_Slider
- * @subpackage WP_Social_Media_Slider/includes
- */
-
-/**
  * The main object class for posts.
  *
  * This class is used for all posts returned from social media networks.
  * This ensures that they all have a consistent and reliable format.
  *
+ * @link       http://wpsocialmediaslider.com
  * @since      0.9.1
- * @package    WP_Social_Media_Slider
- * @subpackage WP_Social_Media_Slider/includes
- * @author     Your Name <email@example.com>
+ *
+ * @package    Wpsms
+ * @subpackage Wpsms/includes
  */
-class WP_Social_Media_Slider_Post {
+
+class Wpsms_Post {
 
 	/**
 	 * The images of the post

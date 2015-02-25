@@ -59,6 +59,7 @@ if(c)for(var d=0;d<c.length;++d){var e=c[d];(null==e.from||e.from<=a.ch)&&(null=
 			});
 	 	}
 
+	 	// Activate the color picker
 		$('.wpsms-minicolors').minicolors();
 
 	 });

@@ -3,24 +3,14 @@
 /**
  * The dashboard-specific functionality of the plugin.
  *
- * @link       http://example.com
  * @since      0.9.1
- *
- * @package    WP_Social_Media_Slider
- * @subpackage WP_Social_Media_Slider/admin
+ * @package    Wpsms
+ * @subpackage Wpsms/admin
+ * @link       http://wpsocialmediaslider.com
+ * @author     Pete Molinero <pete@laternastudio.com>
  */
 
-/**
- * The dashboard-specific functionality of the plugin.
- *
- * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the dashboard-specific stylesheet and JavaScript.
- *
- * @package    WP_Social_Media_Slider
- * @subpackage WP_Social_Media_Slider/admin
- * @author     Your Name <email@example.com>
- */
-class WP_Social_Media_Slider_Admin {
+class Wpsms_Admin {
 
 	/**
 	 * The saved settings for the plugin
@@ -30,6 +20,13 @@ class WP_Social_Media_Slider_Admin {
 	 * @var      class    $version    The repo for the plugin
 	 */
 	private $settings;
+
+	/**
+	 * The registered social media networks.
+	 *
+	 * @since    1.0.6
+	 */
+	private $networks;
 
 	/**
 	 * The ID of this plugin.
@@ -59,14 +56,12 @@ class WP_Social_Media_Slider_Admin {
 	private $repo;
 
 	/**
-	 * Simple method to log data to a file.
+	 * The registered logger
 	 *
-	 * @since    0.9.1
+	 * @since    1.0.6
 	 */
-	public function log( $data ) {
-		error_log( print_r( $data, true ) );
-	}
-
+	private $log;
+	
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -74,13 +69,13 @@ class WP_Social_Media_Slider_Admin {
 	 * @var      string    $plugin_name       The name of this plugin.
 	 * @var      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version, $repo, $settings ) {
-		
-		$this->settings = $settings;
+	public function __construct( $plugin_name, $version, $repo, $settings, $networks, $log ) {
+		$this->settings    = $settings;
 		$this->plugin_name = $plugin_name;
-		$this->version = $version;
-		$this->repo = $repo;
-
+		$this->version     = $version;
+		$this->repo        = $repo;
+		$this->networks    = $networks;
+		$this->log         = $log;
 	}
 
 
@@ -90,15 +85,13 @@ class WP_Social_Media_Slider_Admin {
 	 * @since    0.9.1
 	 */
 	public function add_plugin_admin_menu() {
-
 		$this->plugin_screen_hook_suffix = add_options_page(
-			'WP Social Media Slider Lite',
+			'WP Social Media Slider',
 			'Social Media Slider',
 			'manage_options',
 			$this->plugin_name,
 			array( $this, 'display_plugin_admin_page' )
 		);
-
 	}
 
 	/**
@@ -107,8 +100,7 @@ class WP_Social_Media_Slider_Admin {
 	 * @since    0.9.1
 	 */
 	public function display_plugin_admin_page() {
-
-		include_once( 'partials/wp-social-media-slider-admin-display.php' );
+		include_once( 'views/wpsms-admin-display.php' );
 	}
 
 	/**
@@ -119,19 +111,26 @@ class WP_Social_Media_Slider_Admin {
 	public function register_settings_and_fields() {
 
 		register_setting('wpsms_settings', 'wpsms_settings');
-		//update_option('wpsms_settings', '');
 
 		add_settings_section(
-	        'wpsms_main_section',            // ID used to identify this section and with which to register options
-	        'General Settings',                     // Title to be displayed on the administration page
-	        array($this, 'wpsms_main_settings_callback'),  // Callback used to render the description of the section
-	        $this->plugin_name                   // Page on which to add this section of options
+	        'wpsms_main_section',
+	        __( 'General Settings', 'wp-social-media-slider' ),
+	        array($this, 'wpsms_main_settings_callback'),
+	        $this->plugin_name
 	    );
+
+	    // The display type for posts
+	    add_settings_field(
+	    	'display_type',
+	    	__( 'Display Type', 'wp-social-media-slider' ),
+	    	array( $this, 'wpsms_display_type' ),
+	    	$this->plugin_name,
+	    	'wpsms_main_section');
 
 	    // The total number of posts to display
 	    add_settings_field(
 	    	'total_posts',
-	    	'Total Number of Posts',
+	    	__( 'Total Number of Posts', 'wp-social-media-slider' ),
 	    	array( $this, 'wpsms_total_posts' ),
 	    	$this->plugin_name,
 	    	'wpsms_main_section');
@@ -139,7 +138,7 @@ class WP_Social_Media_Slider_Admin {
 	    // The length of the time that posts will be stored for
 	    add_settings_field(
 	    	'cache_length',
-	    	'Cache Duration (in sec.)',
+	    	__( 'Cache Duration (in sec.)', 'wp-social-media-slider' ),
 	    	array( $this, 'wpsms_cache_length' ),
 	    	$this->plugin_name,
 	    	'wpsms_main_section');
@@ -147,7 +146,7 @@ class WP_Social_Media_Slider_Admin {
 	    // Only refresh the cache via AJAX
 	    add_settings_field(
 	    	'ajax_cache_refresh',
-	    	'AJAX Cache Refresh',
+	    	__( 'AJAX Cache Refresh', 'wp-social-media-slider' ),
 	    	array( $this, 'wpsms_ajax_cache_refresh_setting' ),
 	    	$this->plugin_name,
 	    	'wpsms_main_section');
@@ -155,7 +154,7 @@ class WP_Social_Media_Slider_Admin {
 	    // The length of the time that posts will be stored for
 	    add_settings_field(
 	    	'display_color',
-	    	'Display Color',
+	    	__( 'Display Color', 'wp-social-media-slider' ),
 	    	array( $this, 'wpsms_display_color' ),
 	    	$this->plugin_name,
 	    	'wpsms_main_section');
@@ -163,7 +162,7 @@ class WP_Social_Media_Slider_Admin {
 	    // The length of the time that posts will be stored for
 	    add_settings_field(
 	    	'auto_play',
-	    	'Auto-play Slider',
+	    	__( 'Auto-play Slider', 'wp-social-media-slider' ),
 	    	array( $this, 'wpsms_auto_play_setting' ),
 	    	$this->plugin_name,
 	    	'wpsms_main_section');
@@ -171,78 +170,20 @@ class WP_Social_Media_Slider_Admin {
 	    // Custom JS Initialization
 	    add_settings_field(
 	    	'custom_js_init',
-	    	'Custom JS Intialization',
+	    	__( 'Custom JS Initialization', 'wp-social-media-slider' ),
 	    	array( $this, 'wpsms_custom_js_init' ),
 	    	$this->plugin_name,
 	    	'wpsms_main_section');
 
-	    /**
-	     * The Twitter settings.
-	     */
-		add_settings_section(
-	        'wpsms_twitter_section',                          // ID used to identify this section and with which to register options
-	        'Twitter Settings',                             // Title to be displayed on the administration page
-	        array($this, 'wpsms_twitter_settings_callback'),  // Callback used to render the description of the section
-	        $this->plugin_name                               // Page on which to add this section of options
-	    );
-
-	    // Enable or disable Twitter Posts
-	    add_settings_field(
-	    	'twitter_enable',
-	    	'Enable Twitter',
-	    	array( $this, 'wpsms_enable_twitter_setting' ),
-	    	$this->plugin_name,
-	    	'wpsms_twitter_section');
-
-	    // The Twitter username
-	    add_settings_field(
-	    	'twitter_username',
-	    	'Twitter Username',
-	    	array( $this, 'wpsms_twitter_username_setting' ),
-	    	$this->plugin_name,
-	    	'wpsms_twitter_section');
-
-	    // The Twitter consumer key
-	    add_settings_field(
-	    	'twitter_consumer_key',
-	    	'Twitter Consumer Key',
-	    	array( $this, 'wpsms_twitter_consumer_key_setting' ),
-	    	$this->plugin_name,
-	    	'wpsms_twitter_section');
-
-	    // The Twitter consumer secret
-	    add_settings_field(
-	    	'twitter_consumer_key_secret',
-	    	'Twitter Consumer Key Secret',
-	    	array( $this, 'wpsms_twitter_consumer_key_secret_setting' ),
-	    	$this->plugin_name,
-	    	'wpsms_twitter_section');
-
-	    // The Twitter access token
-	    add_settings_field(
-	    	'twitter_access_token',
-	    	'Twitter Access Token',
-	    	array( $this, 'wpsms_twitter_access_token_setting' ),
-	    	$this->plugin_name,
-	    	'wpsms_twitter_section');
-
-	    // The Twitter access token secret
-	    add_settings_field(
-	    	'twitter_access_token_secret',
-	    	'Twitter Access Token Secret',
-	    	array( $this, 'wpsms_twitter_access_token_secret_setting' ),
-	    	$this->plugin_name,
-	    	'wpsms_twitter_section');
-
+		// Perform individual network registrations
+		foreach ( $this->networks as $network ) {
+			$network->register_settings();
+		}
 	}
 
 
 	public function wpsms_main_settings_callback() {
-	    include_once( 'partials/wp-social-media-slider-general-instructions.php' );
-	}
-
-	public function wpsms_twitter_settings_callback() {
-	    include_once( 'partials/wp-social-media-slider-twitter-instructions.php' );
+	    include_once( 'views/wpsms-general-instructions.php' );
 	}
 
 	/**
@@ -250,6 +191,19 @@ class WP_Social_Media_Slider_Admin {
 	 *
 	 * @since    0.9.1
 	 */
+
+	public function wpsms_display_type() {
+
+		printf("
+			<p>
+			<input name='wpsms_settings[display_type]' type='radio' value='1' " . checked('1', $this->settings['display_type'], false) . " />
+			<label for=''>" . __( 'Display posts by most recent (regardless of social media network).', 'wp-social-media-slider' ) . "</label>
+			</p>
+			<p>
+			<input name='wpsms_settings[display_type]' type='radio' value='2' " . checked('2', $this->settings['display_type'], false) . " />
+			<label for=''>" . __( 'Display an equal number of posts from each social network.', 'wp-social-media-slider' ) . "</label>
+			</p>");
+	}
 
 	public function wpsms_total_posts() {
 		echo "<input name='wpsms_settings[total_posts]' type='number' value='{$this->settings['total_posts']}' />";
@@ -287,37 +241,6 @@ class WP_Social_Media_Slider_Admin {
 
 	public function wpsms_custom_js_init() {
 		printf("<textarea id='wpsms-custom-js-init' class='wpsms-custom-js-init' name='wpsms_settings[custom_js_init]'>{$this->settings['custom_js_init']}</textarea>");
-	}
-
-	public function wpsms_enable_twitter_setting() {
-
-		printf( '<div class="onoffswitch">
-				    <input type="checkbox" name="wpsms_settings[twitter_enable]" class="onoffswitch-checkbox" id="twitter_enable" value="1" ' . checked('1', $this->settings['twitter_enable'], false) . ' >
-				    <label class="onoffswitch-label" for="twitter_enable">
-				        <span class="onoffswitch-inner"></span>
-				        <span class="onoffswitch-switch"></span>
-				    </label>
-				</div>');
-	}
-
-	public function wpsms_twitter_username_setting() {
-		echo "<input name='wpsms_settings[twitter_username]' type='text' value='{$this->settings['twitter_username']}' />";
-	}
-
-	public function wpsms_twitter_consumer_key_setting() {
-		echo "<input name='wpsms_settings[twitter_consumer_key]' type='text' value='{$this->settings['twitter_consumer_key']}' />";
-	}
-
-	public function wpsms_twitter_consumer_key_secret_setting() {
-		echo "<input name='wpsms_settings[twitter_consumer_key_secret]' type='text' value='{$this->settings['twitter_consumer_key_secret']}' />";
-	}
-
-	public function wpsms_twitter_access_token_setting() {
-		echo "<input name='wpsms_settings[twitter_access_token]' type='text' value='{$this->settings['twitter_access_token']}' />";
-	}
-
-	public function wpsms_twitter_access_token_secret_setting() {
-		echo "<input name='wpsms_settings[twitter_access_token_secret]' type='text' value='{$this->settings['twitter_access_token_secret']}' />";
 	}
 
 
@@ -368,5 +291,4 @@ class WP_Social_Media_Slider_Admin {
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wpsms-admin.min.js', array( 'jquery' ), $this->version, false );
 	}
-
 }

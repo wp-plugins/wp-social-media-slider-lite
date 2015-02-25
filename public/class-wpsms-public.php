@@ -1,26 +1,16 @@
 <?php
 
 /**
- * The public-facing functionality of the plugin.
+ * The public facing functionality of the plugin.
  *
- * @link       http://example.com
  * @since      0.9.1
- *
- * @package    WP_Social_Media_Slider
- * @subpackage WP_Social_Media_Slider/public
+ * @package    Wpsms
+ * @subpackage Wpsms/public
+ * @link       http://wpsocialmediaslider.com
+ * @author     Pete Molinero <pete@laternastudio.com>
  */
 
-/**
- * The public-facing functionality of the plugin.
- *
- * Defines the plugin name, version, and two examples hooks for how to
- * enqueue the dashboard-specific stylesheet and JavaScript.
- *
- * @package    WP_Social_Media_Slider
- * @subpackage WP_Social_Media_Slider/public
- * @author     Your Name <email@example.com>
- */
-class WP_Social_Media_Slider_Public {
+class Wpsms_Public {
 
 	/**
 	 * The saved settings for the plugin
@@ -30,6 +20,13 @@ class WP_Social_Media_Slider_Public {
 	 * @var      class    $version    The repo for the plugin
 	 */
 	public $settings;
+
+	/**
+	 * The registered social media networks.
+	 *
+	 * @since    1.0.6
+	 */
+	private $networks;
 
 	/**
 	 * The ID of this plugin.
@@ -59,11 +56,12 @@ class WP_Social_Media_Slider_Public {
 	private $repo;
 
 	/**
-	 * Log some data.
+	 * The registered logger
+	 *
+	 * @since    1.0.6
 	 */
-	public function log( $data ) {
-		error_log( print_r( $data, true ) );
-	}
+	private $log;
+
 
 	public function expose_ajaxurl_js() {
 		echo "<script>var ajaxurl = '" . admin_url('admin-ajax.php') . "';</script>";
@@ -76,22 +74,25 @@ class WP_Social_Media_Slider_Public {
 	 * @var      string    $plugin_name       The name of the plugin.
 	 * @var      string    $version           The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version, $repo, $settings ) {
-
-		$this->settings = $settings;
+	public function __construct( $plugin_name, $version, $repo, $settings, $networks, $log ) {
+		$this->settings    = $settings;
 		$this->plugin_name = $plugin_name;
-		$this->version = $version;
-		$this->repo = $repo;
+		$this->version     = $version;
+		$this->repo        = $repo;
+		$this->networks    = $networks;
+		$this->log         = $log;
 	}
 
 	public function display_wp_social_media_slider() {
 
 		if ( function_exists('curl_version') ) {
 			ob_start();
-				include_once( 'partials/wp-social-media-slider-lazy-loader.php' );
-			$str = ob_get_clean();			
+				include_once( 'views/wpsms-lazy-loader.php' );
+			$str = ob_get_clean();
 		} else {
-			$str = "Please <a href='http://wpsocialmediaslider.com/docs#troubleshooting' target='_blank'>enable the Curl PHP extension</a> on your server.";
+			$str = sprintf( __( 'Please %1senable the Curl PHP extension%2s on your server.', 'wp-social-media-slider' ),
+						'<a href="http://wpsocialmediaslider.com/docs#troubleshooting" target="_blank">',
+						'</a>');
 		}
 
 		return $str;
@@ -111,16 +112,11 @@ class WP_Social_Media_Slider_Public {
 		$all_posts      = $this->repo->get_social_media();
 		$all_posts_html = array();
 
+		// Get the html for each post based on its social media network
 		foreach( $all_posts as $post ) {
-
-			// Capture output
-			ob_start();
-
-			include( 'partials/wp-social-media-slider-twitter-post.php' );
-
-			// Append the output to an array
-			$all_posts_html[] = ob_get_clean();
-
+			if( array_key_exists( $post->type, $this->networks ) ) {
+				$all_posts_html[] = $this->networks[ $post->type ]->get_public_view( $post );
+			}
 		}
 
 		// If ajax refreshing is turned off, we'll always tell the system

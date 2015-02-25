@@ -8,8 +8,8 @@
  * @link       http://www.laternastudio.com
  * @since      0.9.1
  *
- * @package    WP_Social_Media_Slider
- * @subpackage WP_Social_Media_Slider/public/partials
+ * @package    Wpsms
+ * @subpackage Wpsms/public/partials
  */
 ?>
 

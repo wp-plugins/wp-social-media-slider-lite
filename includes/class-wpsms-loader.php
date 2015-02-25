@@ -3,25 +3,18 @@
 /**
  * Register all actions and filters for the plugin
  *
- * @link       http://example.com
- * @since      0.9.1
- *
- * @package    WP_Social_Media_Slider
- * @subpackage WP_Social_Media_Slider/includes
- */
-
-/**
- * Register all actions and filters for the plugin.
- *
  * Maintain a list of all hooks that are registered throughout
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
- * @package    WP_Social_Media_Slider
- * @subpackage WP_Social_Media_Slider/includes
- * @author     Your Name <email@example.com>
+ * @link       http://wpsocialmediaslider.com
+ * @since      0.9.1
+ *
+ * @package    Wpsms
+ * @subpackage Wpsms/includes
  */
-class WP_Social_Media_Slider_Loader {
+
+class Wpsms_Loader {
 
 	/**
 	 * The array of actions registered with WordPress.

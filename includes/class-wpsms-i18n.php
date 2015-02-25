@@ -6,25 +6,14 @@
  * Loads and defines the internationalization files for this plugin
  * so that its ready for translation.
  *
- * @link       http://example.com
+ * @link       http://wpsocialmediaslider.com
  * @since      0.9.1
  *
- * @package    WP_Social_Media_Slider
- * @subpackage WP_Social_Media_Slider/includes
+ * @package    Wpsms
+ * @subpackage Wpsms/includes
  */
 
-/**
- * Define the internationalization functionality.
- *
- * Loads and defines the internationalization files for this plugin
- * so that its ready for translation.
- *
- * @since      0.9.1
- * @package    WP_Social_Media_Slider
- * @subpackage WP_Social_Media_Slider/includes
- * @author     Your Name <email@example.com>
- */
-class WP_Social_Media_Slider_i18n {
+class Wpsms_i18n {
 
 	/**
 	 * The domain specified for this plugin.

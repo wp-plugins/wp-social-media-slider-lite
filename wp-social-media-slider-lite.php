@@ -10,18 +10,18 @@
  *
  * @link              http://example.com
  * @since             0.9.1
- * @package           WP_Social_Media_Slider
+ * @package           Wpsms
  *
  * @wordpress-plugin
- * Plugin Name:       WP Social Media Slider
+ * Plugin Name:       WP Social Media Slider Lite
  * Plugin URI:        http://wpsocialmediaslider.com
- * Description:       A simple slider that displays recent posts from Facebook, Instagram, and Twitter.
- * Version:           1.0.5
+ * Description:       A simple slider that displays recent posts from Twitter.
+ * Version:           1.0.6
  * Author:            Laterna Studio
  * Author URI:        http://laternastudio.com/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       wp-social-media-slider
+ * Text Domain:       wp-social-media-slider-lite
  * Domain Path:       /languages
  */
 
@@ -33,24 +33,24 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * The code that runs during plugin activation.
  */
-require_once plugin_dir_path( __FILE__ ) . 'includes/class-wp-social-media-slider-activator.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpsms-activator.php';
 
 /**
  * The code that runs during plugin deactivation.
  */
-require_once plugin_dir_path( __FILE__ ) . 'includes/class-wp-social-media-slider-deactivator.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpsms-deactivator.php';
 
 /** This action is documented in includes/class-wp-social-media-slider-activator.php */
-register_activation_hook( __FILE__, array( 'WP_Social_Media_Slider_Activator', 'activate' ) );
+register_activation_hook( __FILE__, array( 'Wpsms_Activator', 'activate' ) );
 
 /** This action is documented in includes/class-wp-social-media-slider-deactivator.php */
-register_deactivation_hook( __FILE__, array( 'WP_Social_Media_Slider_Deactivator', 'deactivate' ) );
+register_deactivation_hook( __FILE__, array( 'Wpsms_Deactivator', 'deactivate' ) );
 
 /**
  * The core plugin class that is used to define internationalization,
  * dashboard-specific hooks, and public-facing site hooks.
  */
-require_once plugin_dir_path( __FILE__ ) . 'includes/class-wp-social-media-slider.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-wpsms.php';
 
 /**
  * Begins execution of the plugin.
@@ -63,7 +63,7 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/class-wp-social-media-slide
  */
 function run_socal_media_slider() {
 
-	$plugin = new WP_Social_Media_Slider();
+	$plugin = new Wpsms();
 	$plugin->run();
 
 }

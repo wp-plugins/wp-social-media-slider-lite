@@ -16,7 +16,7 @@
  * Plugin Name:       WP Social Media Slider Lite
  * Plugin URI:        http://wpsocialmediaslider.com
  * Description:       A simple slider that displays recent posts from Twitter.
- * Version:           1.0.7
+ * Version:           1.0.8
  * Author:            Laterna Studio
  * Author URI:        http://laternastudio.com/
  * License:           GPL-2.0+

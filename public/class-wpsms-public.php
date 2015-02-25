@@ -129,6 +129,7 @@ class Wpsms_Public {
 		}
 
 		$response = array(
+			'log_data'       => $this->settings[ 'log_data' ],
 			'time_to_update' => (string)$is_it_time_to_refresh,
 			'posts'          => $all_posts_html,
 			'status'         => 'Successfully collected posts!'

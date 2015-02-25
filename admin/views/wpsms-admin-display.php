@@ -27,8 +27,6 @@
 
 		<p>
 			<a href="#general-settings"><?php echo __( 'General Settings', 'wp-social-media-slider' ); ?></a> | 
-			<a href="#facebook-settings"><?php echo __( 'Facebook Settings', 'wp-social-media-slider' ); ?></a> | 
-			<a href="#instagram-settings"><?php echo __( 'Instagram Settings', 'wp-social-media-slider' ); ?></a> | 
 			<a href="#twitter-settings"><?php echo __( 'Twitter Settings', 'wp-social-media-slider' ); ?></a>
 		</p>
 

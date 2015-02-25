@@ -107,7 +107,8 @@ class Wpsms_Repo {
 		$posts = array();
 
 		foreach( $this->networks as $network ) {
-			$posts[ $network->get_type() ] = $network->get_posts( $this->settings['total_posts'] );
+			$network_posts = $network->get_posts( $this->settings['total_posts'] );
+			if ( $network_posts !== false )	$posts[ $network->get_type() ] = $network_posts;
 		}
 
 		// Truncate the number of posts based on the display type

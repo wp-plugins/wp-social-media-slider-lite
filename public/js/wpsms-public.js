@@ -14,6 +14,10 @@ var LazyLoader;
 	            }
 	        }).done( function(response) {
 
+	        	if ( response.hasOwnProperty('log_data') && response.log_data == '1' ) {
+	        		console.log( response );
+	        	}
+
 				LazyLoader.renderPosts( response.posts, helper );
 
 				if( response.time_to_update == '1' ) {

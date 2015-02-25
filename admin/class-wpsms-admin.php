@@ -119,14 +119,6 @@ class Wpsms_Admin {
 	        $this->plugin_name
 	    );
 
-	    // The display type for posts
-	    add_settings_field(
-	    	'display_type',
-	    	__( 'Display Type', 'wp-social-media-slider' ),
-	    	array( $this, 'wpsms_display_type' ),
-	    	$this->plugin_name,
-	    	'wpsms_main_section');
-
 	    // The total number of posts to display
 	    add_settings_field(
 	    	'total_posts',
@@ -175,6 +167,14 @@ class Wpsms_Admin {
 	    	$this->plugin_name,
 	    	'wpsms_main_section');
 
+	    // The length of the time that posts will be stored for
+	    add_settings_field(
+	    	'log_data',
+	    	__( 'Log Post Data to Console (used for debugging)', 'wp-social-media-slider' ),
+	    	array( $this, 'wpsms_log_data_setting' ),
+	    	$this->plugin_name,
+	    	'wpsms_main_section');
+
 		// Perform individual network registrations
 		foreach ( $this->networks as $network ) {
 			$network->register_settings();
@@ -192,18 +192,6 @@ class Wpsms_Admin {
 	 * @since    0.9.1
 	 */
 
-	public function wpsms_display_type() {
-
-		printf("
-			<p>
-			<input name='wpsms_settings[display_type]' type='radio' value='1' " . checked('1', $this->settings['display_type'], false) . " />
-			<label for=''>" . __( 'Display posts by most recent (regardless of social media network).', 'wp-social-media-slider' ) . "</label>
-			</p>
-			<p>
-			<input name='wpsms_settings[display_type]' type='radio' value='2' " . checked('2', $this->settings['display_type'], false) . " />
-			<label for=''>" . __( 'Display an equal number of posts from each social network.', 'wp-social-media-slider' ) . "</label>
-			</p>");
-	}
 
 	public function wpsms_total_posts() {
 		echo "<input name='wpsms_settings[total_posts]' type='number' value='{$this->settings['total_posts']}' />";
@@ -241,6 +229,17 @@ class Wpsms_Admin {
 
 	public function wpsms_custom_js_init() {
 		printf("<textarea id='wpsms-custom-js-init' class='wpsms-custom-js-init' name='wpsms_settings[custom_js_init]'>{$this->settings['custom_js_init']}</textarea>");
+	}
+
+	public function wpsms_log_data_setting() {
+
+		printf( '<div class="onoffswitch">
+				    <input type="checkbox" name="wpsms_settings[log_data]" class="onoffswitch-checkbox" id="log_data" value="1" ' . checked('1', $this->settings['log_data'], false) . ' >
+				    <label class="onoffswitch-label" for="log_data">
+				        <span class="onoffswitch-inner"></span>
+				        <span class="onoffswitch-switch"></span>
+				    </label>
+				</div>');
 	}
 
 

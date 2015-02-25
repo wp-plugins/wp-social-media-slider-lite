@@ -19,10 +19,17 @@ class Wpsms_Logger {
 	 */
 	public function output( $data ) {
 		$call_info = debug_backtrace();
-		$string_data = print_r( $data, true );
 		$file_path = explode( '\\' , $call_info[0]['file'] );
 		$filename = array_pop( $file_path );
-		error_log(  $filename . ' on line ' . $call_info[0]['line'] . ': ' . $string_data );
+
+		ob_start();
+			echo $filename . ' on line ' . $call_info[0]['line'] . ': ';
+			var_dump( $data );
+
+		$output = ob_get_contents();
+		ob_end_clean();
+
+		error_log( $output );
 	}
 
 }

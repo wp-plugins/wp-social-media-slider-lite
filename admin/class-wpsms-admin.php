@@ -86,7 +86,7 @@ class Wpsms_Admin {
 	 */
 	public function add_plugin_admin_menu() {
 		$this->plugin_screen_hook_suffix = add_options_page(
-			'WP Social Media Slider',
+			'WP Social Media Slider Lite',
 			'Social Media Slider',
 			'manage_options',
 			$this->plugin_name,
@@ -269,7 +269,7 @@ class Wpsms_Admin {
 	public function enqueue_styles( $hook ) {
 
 		// We only want to load these files if we are actually on the settings page for this plugin
-		if ( 'settings_page_wp-social-media-slider' != $hook ) {
+		if ( 'settings_page_wp-social-media-slider-lite' != $hook ) {
 	        return;
 	    }
 
@@ -285,7 +285,7 @@ class Wpsms_Admin {
 	public function enqueue_scripts( $hook ) {
 
 		// We only want to load these files if we are actually on the settings page for this plugin
-		if ( 'settings_page_wp-social-media-slider' != $hook ) {
+		if ( 'settings_page_wp-social-media-slider-lite' != $hook ) {
 	        return;
 	    }
 

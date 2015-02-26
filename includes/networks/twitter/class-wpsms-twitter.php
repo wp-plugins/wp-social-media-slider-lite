@@ -32,14 +32,16 @@ class Wpsms_Twitter extends Wpsms_Base_Network {
 		$settings = $this->remove_empty_settings( get_option('wpsms_twitter_settings', array() ) );
 
 		// The default values for the settings
-		$defaults = [
+		$defaults = array(
 			'enable'              => '0',
+			'include_retweets'    => '0',
+			'include_replies'     => '0',
 			'username'            => '',
 			'consumer_key'        => '',
 			'consumer_key_secret' => '',
 			'access_token'        => '',
 			'access_token_secret' => '',
-		];
+		);
 
 		// Any keys not present will be added with the default value
 		$settings = $settings + $defaults;
@@ -54,6 +56,10 @@ class Wpsms_Twitter extends Wpsms_Base_Network {
 	 * @return  array  an array of post objects
 	 */
 	public function get_posts( $count ) {
+
+		// Grab more tweets than needed just in case there are
+		// a lot of replies and RTs that mess with the count
+		(string) $count = (int) $count * 5;
 
 		// Don't return anything if it's disabled
 		if ( $this->settings['enable'] !== '1' ) return false;
@@ -72,8 +78,11 @@ class Wpsms_Twitter extends Wpsms_Base_Network {
 		// Migrate over to SSL/TLS
 		$twitter->ssl_verifypeer = true;
 
+		$include_retweets = ( $this->settings['include_retweets'] === '1' ) ? 'true'  : 'false';
+		$include_replies  = ( $this->settings['include_replies']  === '1' ) ? 'false' : 'true';
+
 		// Load the Tweets
-		$tweets = $twitter->get('statuses/user_timeline', array('screen_name' => $this->settings['username'], 'exclude_replies' => 'true', 'include_rts' => 'false', 'count' => $count ));
+		$tweets = $twitter->get('statuses/user_timeline', array('screen_name' => $this->settings['username'], 'exclude_replies' => $include_replies, 'include_rts' => $include_retweets, 'count' => $count ));
 		$post_collection = [];
 
 		// Return an empty set if there were no tweets or there were errors
@@ -194,6 +203,22 @@ class Wpsms_Twitter extends Wpsms_Base_Network {
 	    	$this->plugin_name,
 	    	'wpsms_twitter_section');
 
+	    // Enable or disable Twitter Posts
+	    add_settings_field(
+	    	'twitter_include_retweets',
+	    	__( 'Include Retweets', 'wp-social-media-slider' ),
+	    	array( $this, 'include_retweets_setting' ),
+	    	$this->plugin_name,
+	    	'wpsms_twitter_section');
+
+	    // Enable or disable Twitter Posts
+	    add_settings_field(
+	    	'twitter_include_replies',
+	    	__( 'Include Replies', 'wp-social-media-slider' ),
+	    	array( $this, 'include_replies_setting' ),
+	    	$this->plugin_name,
+	    	'wpsms_twitter_section');
+
 	    // The Twitter username
 	    add_settings_field(
 	    	'twitter_username',
@@ -244,6 +269,28 @@ class Wpsms_Twitter extends Wpsms_Base_Network {
 		printf( '<div class="onoffswitch">
 				    <input type="checkbox" name="wpsms_twitter_settings[enable]" class="onoffswitch-checkbox" id="twitter_enable" value="1" ' . checked('1', $this->settings['enable'], false) . ' >
 				    <label class="onoffswitch-label" for="twitter_enable">
+				        <span class="onoffswitch-inner"></span>
+				        <span class="onoffswitch-switch"></span>
+				    </label>
+				</div>');
+	}
+
+	public function include_retweets_setting() {
+
+		printf( '<div class="onoffswitch">
+				    <input type="checkbox" name="wpsms_twitter_settings[include_retweets]" class="onoffswitch-checkbox" id="twitter_include_retweets" value="1" ' . checked('1', $this->settings['include_retweets'], false) . ' >
+				    <label class="onoffswitch-label" for="twitter_include_retweets">
+				        <span class="onoffswitch-inner"></span>
+				        <span class="onoffswitch-switch"></span>
+				    </label>
+				</div>');
+	}
+
+	public function include_replies_setting() {
+
+		printf( '<div class="onoffswitch">
+				    <input type="checkbox" name="wpsms_twitter_settings[include_replies]" class="onoffswitch-checkbox" id="twitter_include_replies" value="1" ' . checked('1', $this->settings['include_replies'], false) . ' >
+				    <label class="onoffswitch-label" for="twitter_include_replies">
 				        <span class="onoffswitch-inner"></span>
 				        <span class="onoffswitch-switch"></span>
 				    </label>

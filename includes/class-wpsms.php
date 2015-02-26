@@ -85,7 +85,7 @@ class Wpsms {
 	public function __construct() {
 
 		$this->plugin_name = 'wp-social-media-slider-lite';
-		$this->version = '1.0.8';
+		$this->version = '1.0.9';
 		$this->settings = $this->set_default_settings( get_option('wpsms_settings', array() ) );
 
 		$this->load_dependencies();
@@ -120,7 +120,7 @@ class Wpsms {
 			}
 		}
 
-		$defaults = [
+		$defaults = array(
 			'display_type'                => '1',
 			'total_posts'                 => '10',
 			'cache_length'                => 60,
@@ -131,7 +131,7 @@ class Wpsms {
 			'custom_js_init'              => false,
 			'log_data'                    => '0',
 			'time_of_last_update'         => '0',
-		];
+		);
 
 		// Any keys not present will be added with the default value
 		$settings = $settings + $defaults;

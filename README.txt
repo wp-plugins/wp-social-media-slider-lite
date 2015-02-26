@@ -1,9 +1,9 @@
-﻿=== WP Social Media Slider Lite ===
+=== WP Social Media Slider Lite ===
 Contributors: laternastudio
 Tags: social, feed, slider, social media, facebook, twitter, instagram, latest tweets
 Requires at least: 3.0.1
 Tested up to: 4.1
-Stable tag: 1.0.8
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,12 @@ Ordinarily, connecting plugins like this to Twitter can be a real pain. In order
 2. /assets/screenshot-2.png
 
 == Changelog ==
+
+= 1.0.9 =
+* Added option to enable/disable retweets
+* Added option to enable/disable replies
+* Fixed bug that caused Twitter to return incorrect number of tweets
+* Improved compatibility with older versions of PHP
 
 = 1.0.8 =
 * Added log data option to the admin settings.

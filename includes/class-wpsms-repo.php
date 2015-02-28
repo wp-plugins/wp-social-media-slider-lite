@@ -112,20 +112,13 @@ class Wpsms_Repo {
 		}
 
 		// Truncate the number of posts based on the display type
-		if( $this->settings['display_type'] == '2' ) {
-			$all_posts = $this->truncate_by_network_equally( $posts );
+		$joined_posts = array();
+
+		foreach( $posts as $network ) {
+			$joined_posts += $network;
 		}
-		else {
 
-			// Join the arrays together with the addition operator
-			$joined_posts = array();
-
-			foreach( $posts as $network ) {
-				$joined_posts += $network;
-			}
-
-			$all_posts = $this->truncate_by_most_recent( $joined_posts );
-		}
+		$all_posts = $this->truncate_by_most_recent( $joined_posts );
 
 		if ( !empty( $all_posts ) ) {
 			// Save the time of this update
@@ -175,61 +168,4 @@ class Wpsms_Repo {
 
 	}
 
-
-	/**
-	 * Truncate posts while maintaining equal numbers per social media network
-	 *
-	 * This method of truncating posts tries to enforce that the same number
-	 * of posts is used from each social media network. For example, if 15 posts
-	 * are requested, it will pull 5 from each social media network. In cases
-	 * where a number not divisible by 3 is provided, it will simply pull an extra
-	 * one or two posts from one or two of the networks. The same steps are taken
-	 * if one of the social networks does not have enough posts available to satisfy
-	 * the needs of the request.
-	 *
-	 * @since      0.9.1
-	 */
-	public function truncate_by_network_equally( $networks ) {
-
-		$all_posts = array();
-		$index = 0;
-
-		while ( count( $all_posts ) < $this->settings['total_posts'] ) {
-
-			// Grab the most recent post from the given social media network
-			$post = reset( $networks[ $index ] ); // Set pointer to the first element and return the value
-			$post_key = key( $networks[ $index ] ); // returns the index element of the current array position.
-
-			// Remove the array element
-			unset( $networks[ $index ][$post_key] );
-
-			if( $post ) {
-				$all_posts[ $post_key ] = $post;
-			}
-
-			// We're cycling through the social networks, adding posts from each.
-			// The index helps us to advance to the next network when we've pulled
-			// a post from the current network. Here we increase or reset the index.
-			$index = ( $index < count( $networks ) - 1 ) ? $index + 1 : 0;
-
-			// Make there are enough total posts to continue going
-			$is_post_remaining = false;
-
-			foreach ( $networks as $network ) {
-				if ( !empty( $network ) ) {
-					$is_post_remaining = true;
-				}
-			}
-			
-			// If no remaining posts were found, break
-			if ( !$is_post_remaining ) break;
-
-		}
-
-		// Sort the array by key in reverse order
-		// In this case, the keys are the time of posting
-		krsort( $all_posts );
-
-		return $all_posts;
-	}
 }

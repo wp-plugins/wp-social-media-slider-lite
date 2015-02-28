@@ -77,6 +77,94 @@ if(typeof console === "undefined") {
     }
 }
 
+(function( $ ) {
+	'use strict';
+
+	 $( function() {
+
+	 	// Listen to the click handler for deactivation
+		$( "#wpsms_deactivation" ).magnificPopup({
+		  type: 'inline',
+		  showCloseBtn: false,
+		});
+
+	 	// Listen to the click handler for canceling deactivation
+		$( "#wpsms_cancel_deactivate_modal" ).on( "click", function() {
+			$.magnificPopup.close();
+		});
+
+	 	// Listen to the click handler for confirming deactivation
+		$( "#wpsms_confirm_deactivate_modal" ).on( "click", function() {
+
+			$.magnificPopup.close();
+
+			// Initiate a deactivation request
+			$.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				dataType: 'json',
+				data: { action: 'wpsms_deactivation' },
+			})
+			.done(function( response ) {
+
+				if ( response.result == 'success' ) {
+					$('.notifications').html('<div class="activation-form updated"><p>' + response.message + '</p></div>');
+					$('#wpsms-deactivation-link-section').remove();
+				}
+				else {
+					$('.notifications').html('<div class="activation-form error"><p>' + response.message + '</p></div>');
+				}
+			})
+			.fail(function( response ) {
+				$('.notifications').html('<div class="activation-form error"><p>There was an error communicating with the license server.</p></div>');
+			});
+		});
+
+	 	// Listen to the click handler for activation
+		$( "#wpsms_activation" ).on( "click", function() {
+
+			var license_key = $( '#wpsms_license_key' ).val();
+
+			// Hide fields and animate connecting to license server.
+			$( '.wpsms-initial-info' ).hide();
+			$( '.wpsms-communicating' ).show();
+			
+
+			// Don't continue if there's no license key entered.
+			if ( license_key == '' ) return false;
+
+			$.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				dataType: 'json',
+				data: { license_key: license_key, action: 'wpsms_activation' },
+			})
+			.done(function( response ) {
+
+				var container = $( '.activation-form' );
+				var heading;
+
+				if ( response.result == 'success' ) {
+					container.removeClass( 'update-nag' ).addClass( 'updated' );
+					heading = "Plugin activation complete!";
+				}
+				else {
+					container.removeClass( 'update-nag' ).addClass( 'error' );
+					heading = "Plugin activation failed!";
+				}
+
+				$( '.activation-form' ).html( '<h4>' + heading + '</h4><p>' + response.message + '.</p><p style="margin-top: 1em;"><a href="#" onclick="location.reload(true)">Refresh Settings Page</a></p>' );
+			})
+			.fail(function( response ) {
+				$( '.activation-form' ).html( '<p>There was an error contacting the license server.</p>' );
+			})
+		});
+	});
+
+
+})( jQuery );
+
+
 /*! Magnific Popup - v1.0.0 - 2015-01-03
 * http://dimsemenov.com/plugins/magnific-popup/
 * Copyright (c) 2015 Dmitry Semenov; */

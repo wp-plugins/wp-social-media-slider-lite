@@ -85,7 +85,7 @@ class Wpsms {
 	public function __construct() {
 
 		$this->plugin_name = 'wp-social-media-slider-lite';
-		$this->version = '1.0.9';
+		$this->version = '1.1.0';
 		$this->settings = $this->set_default_settings( get_option('wpsms_settings', array() ) );
 
 		$this->load_dependencies();

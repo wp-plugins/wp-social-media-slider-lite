@@ -83,7 +83,7 @@ class Wpsms_Twitter extends Wpsms_Base_Network {
 
 		// Load the Tweets
 		$tweets = $twitter->get('statuses/user_timeline', array('screen_name' => $this->settings['username'], 'exclude_replies' => $include_replies, 'include_rts' => $include_retweets, 'count' => $count ));
-		$post_collection = [];
+		$post_collection = array();
 
 		// Return an empty set if there were no tweets or there were errors
 		if ( empty($tweets) || isset( $tweets->errors ) ) return $post_collection;

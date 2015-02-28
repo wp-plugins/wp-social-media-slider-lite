@@ -192,7 +192,6 @@ class Wpsms_Admin {
 	 * @since    0.9.1
 	 */
 
-
 	public function wpsms_total_posts() {
 		echo "<input name='wpsms_settings[total_posts]' type='number' value='{$this->settings['total_posts']}' />";
 	}
@@ -290,4 +289,5 @@ class Wpsms_Admin {
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wpsms-admin.min.js', array( 'jquery' ), $this->version, false );
 	}
+
 }

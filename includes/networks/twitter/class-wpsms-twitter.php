@@ -90,17 +90,8 @@ class Wpsms_Twitter extends Wpsms_Base_Network {
 
 	    foreach($tweets as $tweet) {
 
-	    	// Correct any special character issues
-	        $tweet_html = htmlentities( $tweet->text, ENT_NOQUOTES, 'UTF-8');;
-
-	        // Make links active
-	        $tweet_html = preg_replace("@(https?://([-\w\.]+)+(/([\w/_\.]*(\?\S+)?(#\S+)?)?)?)@", '<a href="$1" target="_blank">$1</a>', $tweet_html);
-
-	        // Linkify user mentions
-	        $tweet_html = preg_replace("/@(\w+)/", '<a href="http://twitter.com/$1" target="_blank">@$1</a>', $tweet_html);
-
-	        // Linkify tags
-	    	$tweet_html = preg_replace("/\s+#(\w+)/", ' <a href="https://twitter.com/search?q=%23$1" target="_blank">#$1</a>', $tweet_html);
+	    	// Omit posts shorter than the length defined in the settings
+	    	if ( $this->settings['omit_shorter_than'] > strlen( $tweet->text ) ) continue;
 
 	        // Parse the tweet created_at into a php date
 	        $tweet_date = strtotime( $tweet->created_at );
@@ -132,12 +123,37 @@ class Wpsms_Twitter extends Wpsms_Base_Network {
 	    		}
 	    	}
 
+	    	// Piece together the url for the tweet
+	    	$tweet_url = 'https://twitter.com/' . $tweet->user->id_str . '/status/' . $tweet->id_str;
+
 	    	$twitter_post = new Wpsms_Post( array(
 				'type'           => 'twitter',
 				'unix_timestamp' => $tweet_date,
 				'username'       => $tweet->user->screen_name,
-				'images'         => $tweet_images
+				'images'         => $tweet_images,
+				'url'            => $tweet_url
 	    		));
+
+	    	// Correct any special character issues
+	        $tweet_html = htmlentities( $tweet->text, ENT_NOQUOTES, 'UTF-8');
+
+	        // Record whether or not the post will be shortened
+	    	$twitter_post->shortened = $this->is_shortened( $tweet_html, $this->settings['limit_length'], $twitter_post );
+
+	    	// Set the link text that will be shown if the post is shortened
+	    	$twitter_post->read_more_text = apply_filters( 'wpsms-read-more-text', 'Read More', $twitter_post );
+
+	    	// Perform the actual shorten
+	    	$tweet_html = $this->soft_shorten( $tweet_html, $this->settings['limit_length'], $twitter_post );
+
+	        // Make links active
+	        $tweet_html = $this->linkify( $tweet_html );
+
+	        // Linkify user mentions
+	        $tweet_html = preg_replace("/@(\w+)/", '<a href="http://twitter.com/$1" target="_blank">@$1</a>', $tweet_html);
+
+	        // Linkify tags
+	    	$tweet_html = preg_replace("/\s+#(\w+)/", ' <a href="https://twitter.com/search?q=%23$1" target="_blank">#$1</a>', $tweet_html);
 
 	    	// Set up filters
 	    	$twitter_post->html = apply_filters( 'wpsms-post-html', $tweet_html, $twitter_post );
@@ -161,7 +177,8 @@ class Wpsms_Twitter extends Wpsms_Base_Network {
 	 * @return string         The rendered view
 	 */
 	public function get_public_view( $post ) {
-		return $this->render( plugin_dir_path( __FILE__ ) . 'views/wpsms-twitter-public-view.php', array( 'post' => $post ) );
+		$public_view = $this->get_view_path( 'wpsms-twitter-public-view.php' );
+		return $this->render( $public_view, array( 'post' => $post ) );
 	}
 
 

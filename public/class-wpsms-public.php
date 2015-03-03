@@ -176,6 +176,29 @@ class Wpsms_Public {
 			");
 	}
 
+
+	public function variable_limit_length( $limit, $post ) {
+
+		switch ( $post->type ) {
+			case 'facebook':
+				if ( count( $post->images ) > 0 ) {
+					$limit -= 30;
+				}
+				break;
+			case 'twitter':
+				if ( count( $post->images ) > 0 ) {
+					$limit -= 30;
+				}
+				break;
+			case 'instagram':
+				$limit -= 30;
+				break;
+		}
+
+		return $limit;
+
+	}
+
 	/**
 	 * Register the stylesheets for the public-facing side of the site.
 	 *

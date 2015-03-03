@@ -3,7 +3,7 @@ Contributors: laternastudio
 Tags: social, feed, slider, social media, facebook, twitter, instagram, latest tweets
 Requires at least: 3.0.1
 Tested up to: 4.1
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,12 @@ Ordinarily, connecting plugins like this to Twitter can be a real pain. In order
 2. /assets/screenshot-2.png
 
 == Changelog ==
+
+= 1.1.1 =
+* Added option to omit posts under a set length
+* Added option to shorten long posts and offer a "Read More" link
+* Added a few more actions and filters
+* Fixed bug that occasionally caused links to be incorrect
 
 = 1.1.0 =
 * Fixed a bug that occurred older versions of PHP

@@ -46,9 +46,9 @@ class Wpsms_Base_Network {
 	 * @var      string    $plugin_name       The name of the plugin.
 	 * @var      string    $version           The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $log ) {
+	public function __construct( $plugin_name, $settings, $log ) {
 		$this->log         = $log;
-		$this->settings    = $this->get_settings();
+		$this->settings    = $this->get_settings() + $settings;
 		$this->plugin_name = $plugin_name;
 	}
 
@@ -61,7 +61,6 @@ class Wpsms_Base_Network {
 	public function get_type() {
 		return $this->type;
 	}
-
 
 	/**
 	 * Remove empty settings from the settings array
@@ -149,6 +148,91 @@ class Wpsms_Base_Network {
 		$output = ob_get_contents();
 		ob_end_clean();		
 		return $output;		
+	}
+
+
+	/**
+	 * Get the path of the view file, allowing for child theme overrides
+	 *
+	 * @since   1.1.1
+	 * @param   string  $filename  the filename of the view file (not incl. path)
+	 * @return  string             the full path of the view file
+	 */
+	public function get_view_path( $filename ) {
+
+		$child_theme_path = get_stylesheet_directory() . '/wp-social-media-slider/' . $filename;
+		$default_path     = plugin_dir_path( __FILE__ ) . $this->type . '/views/' . $filename;
+
+		if ( file_exists( $child_theme_path ) ) {
+			return $child_theme_path;
+		}
+		else {
+			return $default_path;
+		}
+
+	}
+
+	/**
+	 * Shorten a string of text, but don't cut in the middle of a word.
+	 *
+	 * @since   1.1.1
+	 * @param   string  $string  The string to be shortened
+	 * @param   int     $limit   The number of characters to limit to
+	 * @param   object  $post    The post object
+	 * @return  string           The shortened string
+	 */
+	public function soft_shorten( $string, $limit, $post ) {
+
+		$words = explode( ' ', $string );
+		$shortened = '';
+		$limit = apply_filters( 'wpsms_limit_length', $limit, $post );
+
+		// Continue adding words until we've passed the limit
+		foreach ( $words as $word ) {
+
+			$shortened_plus = ( $shortened == '' ) ? $word : $shortened . ' ' . $word;
+
+			if ( $limit >= strlen( $shortened_plus ) ) {
+				$shortened = $shortened_plus;
+			} else {
+				return $shortened . '...';
+			}
+		}
+
+		return $shortened;
+	}
+
+	/**
+	 * Determine whether or not the post will be shortened
+	 *
+	 * @since   1.1.1
+	 * @param   string  $string  The string to be shortened
+	 * @param   int     $limit   The number of characters to limit to
+	 * @return  string           The shortened string
+	 */
+	public function is_shortened( $string, $limit, $post ) {
+
+		$limit = apply_filters( 'wpsms_limit_length', $limit, $post );
+
+		if ( strlen( $string ) > $limit ) {
+			return true;
+		}
+		else {
+			return false;
+		}
+
+	}
+
+	/**
+	 * Add anchor tags around all urls in text
+	 *
+	 * @since   1.1.1
+	 * @param   string  $text  The text to be parsed
+	 * @return  string         The text with anchors in it
+	 */
+	public function linkify( $text ) {
+		$with_links = preg_replace('@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@', '<a href="$1" target="_blank">$1</a>', $text);
+		return $with_links;
 	}
 
 

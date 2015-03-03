@@ -159,11 +159,19 @@ class Wpsms_Admin {
 	    	$this->plugin_name,
 	    	'wpsms_main_section');
 
-	    // Custom JS Initialization
+	    // The length of the time that posts will be stored for
 	    add_settings_field(
-	    	'custom_js_init',
-	    	__( 'Custom JS Initialization', 'wp-social-media-slider' ),
-	    	array( $this, 'wpsms_custom_js_init' ),
+	    	'omit_shorter_than',
+	    	__( 'Omit posts shorter than (number of characters)', 'wp-social-media-slider' ),
+	    	array( $this, 'wpsms_omit_shorter_than_setting' ),
+	    	$this->plugin_name,
+	    	'wpsms_main_section');
+
+	    // The length of the time that posts will be stored for
+	    add_settings_field(
+	    	'limit_length',
+	    	__( 'Limit total post length to (number of characters)', 'wp-social-media-slider' ),
+	    	array( $this, 'wpsms_limit_length_setting' ),
 	    	$this->plugin_name,
 	    	'wpsms_main_section');
 
@@ -172,6 +180,14 @@ class Wpsms_Admin {
 	    	'log_data',
 	    	__( 'Log Post Data to Console (used for debugging)', 'wp-social-media-slider' ),
 	    	array( $this, 'wpsms_log_data_setting' ),
+	    	$this->plugin_name,
+	    	'wpsms_main_section');
+
+	    // Custom JS Initialization
+	    add_settings_field(
+	    	'custom_js_init',
+	    	__( 'Custom JS Initialization', 'wp-social-media-slider' ),
+	    	array( $this, 'wpsms_custom_js_init' ),
 	    	$this->plugin_name,
 	    	'wpsms_main_section');
 
@@ -226,10 +242,6 @@ class Wpsms_Admin {
 				</div>');
 	}
 
-	public function wpsms_custom_js_init() {
-		printf("<textarea id='wpsms-custom-js-init' class='wpsms-custom-js-init' name='wpsms_settings[custom_js_init]'>{$this->settings['custom_js_init']}</textarea>");
-	}
-
 	public function wpsms_log_data_setting() {
 
 		printf( '<div class="onoffswitch">
@@ -241,6 +253,17 @@ class Wpsms_Admin {
 				</div>');
 	}
 
+	public function wpsms_omit_shorter_than_setting() {
+		echo "<input name='wpsms_settings[omit_shorter_than]' type='number' value='{$this->settings['omit_shorter_than']}' />";
+	}
+
+	public function wpsms_limit_length_setting() {
+		echo "<input name='wpsms_settings[limit_length]' type='number' value='{$this->settings['limit_length']}' />";
+	}
+
+	public function wpsms_custom_js_init() {
+		printf("<textarea id='wpsms-custom-js-init' class='wpsms-custom-js-init' name='wpsms_settings[custom_js_init]'>{$this->settings['custom_js_init']}</textarea>");
+	}
 
 	/**
 	 * Add settings action link to the plugins page.

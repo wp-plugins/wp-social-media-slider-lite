@@ -85,7 +85,7 @@ class Wpsms {
 	public function __construct() {
 
 		$this->plugin_name = 'wp-social-media-slider-lite';
-		$this->version = '1.1.0';
+		$this->version = '1.1.1';
 		$this->settings = $this->set_default_settings( get_option('wpsms_settings', array() ) );
 
 		$this->load_dependencies();
@@ -128,6 +128,8 @@ class Wpsms {
 			'post_cache'                  => '0',
 			'display_color'               => '#000000',
 			'auto_play'                   => '0',
+			'omit_shorter_than'           => '40',
+			'limit_length'                => '140',
 			'custom_js_init'              => false,
 			'log_data'                    => '0',
 			'time_of_last_update'         => '0',
@@ -170,7 +172,7 @@ class Wpsms {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/networks/twitter/class-wpsms-twitter.php';
 
 		$this->networks = array(
-			'twitter'   => new Wpsms_Twitter( $this->plugin_name, $this->log )
+			'twitter'   => new Wpsms_Twitter( $this->plugin_name, $this->settings, $this->log )
 			);
 
 		/**
@@ -279,6 +281,7 @@ class Wpsms {
 		$this->loader->add_action( 'wp_ajax_nopriv_wpsms_refresh_cache', $plugin_public, 'refresh_cache' );
 		$this->loader->add_action( 'wp_ajax_wpsms_refresh_cache', $plugin_public, 'refresh_cache' );
 
+		$this->loader->add_filter( 'wpsms_limit_length', $plugin_public, 'variable_limit_length', 10, 2 );
 		add_shortcode( 'wp-social-media-slider', array( $plugin_public, 'display_wp_social_media_slider' ) );
 
 	}

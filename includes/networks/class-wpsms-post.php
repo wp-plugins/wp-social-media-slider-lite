@@ -55,7 +55,28 @@ class Wpsms_Post {
 	 *
 	 * @since    0.9.1
 	 */
+	 public $user_url;
+
+	/**
+	 * The url of the social media post
+	 *
+	 * @since    0.9.1
+	 */
 	 public $url;
+
+	/**
+	 * The primary url that the post links to, if applicable
+	 *
+	 * @since    0.9.1
+	 */
+	 public $link;
+
+	/**
+	 * Whether or not the post was shortened
+	 *
+	 * @since    0.9.1
+	 */
+	 public $shortened;
 
 	/**
 	 * The Unix timestamp of the post
@@ -75,7 +96,10 @@ class Wpsms_Post {
 		$this->date = ( isset( $attrs['date'] ) ) ? $attrs['date'] : '' ;
 		$this->type = ( isset( $attrs['type'] ) ) ? $attrs['type'] : '' ;
 		$this->username = ( isset( $attrs['username'] ) ) ? $attrs['username'] : '' ;
+		$this->user_url = ( isset( $attrs['user_url'] ) ) ? $attrs['user_url'] : '' ;
 		$this->url = ( isset( $attrs['url'] ) ) ? $attrs['url'] : '' ;
+		$this->link = ( isset( $attrs['link'] ) ) ? $attrs['link'] : '' ;
+		$this->shortened = ( isset( $attrs['shortened'] ) ) ? $attrs['shortened'] : false ;
 		$this->unix_timestamp = ( isset( $attrs['unix_timestamp'] ) ) ? $attrs['unix_timestamp'] : '' ;
 	}
 

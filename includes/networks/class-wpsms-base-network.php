@@ -50,6 +50,8 @@ class Wpsms_Base_Network {
 		$this->log         = $log;
 		$this->settings    = $this->get_settings() + $settings;
 		$this->plugin_name = $plugin_name;
+
+		add_action( 'wp_ajax_connection_status_' . $this->type, array( $this, 'connection_status' ) );
 	}
 
 	/**
@@ -233,6 +235,45 @@ class Wpsms_Base_Network {
 	public function linkify( $text ) {
 		$with_links = preg_replace('@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@', '<a href="$1" target="_blank">$1</a>', $text);
 		return $with_links;
+	}
+
+
+	/**
+	 * Get an object with the connection status
+	 *
+	 * @since   1.1.2
+	 * @return  string  the html indicator
+	 */
+	public function connection_status() {
+		
+		$connection = $this->validate_connection();
+
+		if ( $connection->status ) {
+			$html = "<span> </span>Connected!";
+		}
+		else {
+			$html = sprintf ( "<span> </span>Connection <a href='#wpsms-connection-info-modal-%1s' id='open-twitter-info-modal' class='wpsms-info'>error</a>!", $this->type );
+
+			$html .= sprintf ( "<div id='wpsms-connection-info-modal-%1s' class='white-popup mfp-hide'>
+						<h3>%2s</h3>
+						<p>%3s</p>
+						<textarea class='wpsms-error-textarea'>%4s</textarea>
+					</div>",
+					$this->type,
+					__( 'Error Details', 'wp-social-media-slider' ),
+					__( 'Be sure to include this error information when you submit a support request.', 'wp-social-media-slider' ),
+					print_r( $connection->error, true )
+					);
+		}
+
+		$response = array(
+			'html' => $html,
+			);
+
+		$response['status'] = ( $connection->status ) ? 'connected' : 'not connected';
+
+		die( json_encode( $response ) );
+
 	}
 
 

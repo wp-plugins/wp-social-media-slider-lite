@@ -27,7 +27,8 @@
 
 		<p>
 			<a href="#general-settings"><?php echo __( 'General Settings', 'wp-social-media-slider' ); ?></a> | 
-			<a href="#twitter-settings"><?php echo __( 'Twitter Settings', 'wp-social-media-slider' ); ?></a>
+			<a href="#twitter-settings"><?php echo __( 'Twitter Settings', 'wp-social-media-slider' ); ?></a> | 
+			<a href="#wpsms-system-status" class='wpsms-info'><?php echo __( 'System Status', 'wp-social-media-slider' ); ?></a>
 		</p>
 
 	<div class="notifications">
@@ -55,4 +56,20 @@
 		</p>
 	</form>
 
+	<?php echo "<script>var wpsms_url = '" . plugins_url() . "/wp-social-media-slider/';</script>"; ?>
+
+
+<div id="wpsms-system-status" style="max-width: 450px;" class='white-popup mfp-hide'>
+	<h3><?php echo __( "System Status", 'wp-social-media-slider' ); ?></h3>
+	<p><strong>PHP Version:</strong> <?php echo phpversion();?></p>
+
+	<?php if ( function_exists('curl_version') ) : ?>
+		<?php $curl_version = curl_version(); ?>
+		<p><strong>Curl Version:</strong> <?php echo $curl_version['version']; ?></p>
+	<?php else: ?>
+		<p><strong>Curl Version:</strong> Disabled</p>
+	<?php endif; ?>
+
+	<p><strong>JSON Version:</strong> <?php echo ( phpversion( 'json' ) ) ? phpversion( 'json' ) : 'Disabled'; ?></p>
+	<p><strong>Server:</strong> <?php echo ( array_key_exists( 'SERVER_SOFTWARE', $_SERVER) ) ? $_SERVER["SERVER_SOFTWARE"] : "Unknown"; ?></p>
 </div>

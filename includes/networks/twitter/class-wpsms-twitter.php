@@ -2,6 +2,9 @@
 
 require_once __DIR__ . "/../class-wpsms-base-network.php";
 
+// Load Twitter class
+require_once('TwitterOAuth.php');
+
 /**
 * Load recent posts from Facebook
  *
@@ -20,6 +23,35 @@ class Wpsms_Twitter extends Wpsms_Base_Network {
 	 */
 	protected $type = 'twitter';	
 
+	/**
+	 * The Twitter api connection
+	 *
+	 * @since    1.1.2
+	 */
+	protected $connect;	
+
+
+	/**
+	 * Set up the Twitter API connection
+	 *
+	 * @since  1.1.2
+	 */
+    public function __construct( $plugin_name, $settings, $log )
+    {
+        // Call the base network constructor
+        parent::__construct( $plugin_name, $settings, $log );
+
+		// Create the connection
+		$this->connect = new TwitterOAuth(
+			$this->settings['consumer_key'],
+			$this->settings['consumer_key_secret'],
+			$this->settings['access_token'],
+			$this->settings['access_token_secret']
+			);
+
+		// Migrate over to SSL/TLS
+		$this->connect->ssl_verifypeer = true;
+    }
 
 	/**
 	 * Retrieve the settings for the network
@@ -64,25 +96,11 @@ class Wpsms_Twitter extends Wpsms_Base_Network {
 		// Don't return anything if it's disabled
 		if ( $this->settings['enable'] !== '1' ) return false;
 
-		// Load Twitter class
-		require_once('TwitterOAuth.php');
-
-		// Create the connection
-		$twitter = new TwitterOAuth(
-			$this->settings['consumer_key'],
-			$this->settings['consumer_key_secret'],
-			$this->settings['access_token'],
-			$this->settings['access_token_secret']
-			);
-
-		// Migrate over to SSL/TLS
-		$twitter->ssl_verifypeer = true;
-
 		$include_retweets = ( $this->settings['include_retweets'] === '1' ) ? 'true'  : 'false';
 		$include_replies  = ( $this->settings['include_replies']  === '1' ) ? 'false' : 'true';
 
 		// Load the Tweets
-		$tweets = $twitter->get('statuses/user_timeline', array('screen_name' => $this->settings['username'], 'exclude_replies' => $include_replies, 'include_rts' => $include_retweets, 'count' => $count ));
+		$tweets = $this->connect->get('statuses/user_timeline', array('screen_name' => $this->settings['username'], 'exclude_replies' => $include_replies, 'include_rts' => $include_retweets, 'count' => $count ));
 		$post_collection = array();
 
 		// Return an empty set if there were no tweets or there were errors
@@ -163,6 +181,45 @@ class Wpsms_Twitter extends Wpsms_Base_Network {
 	    }
 
 		return $post_collection;
+	}
+
+	/**
+	 * Validate whether or not we can connect to the Instagram API
+	 *
+	 * @since   1.1.2
+	 * @return  bool  a true or false indicator about the connection
+	 */
+	public function validate_connection() {
+
+		$response = new stdClass();
+
+		// Use a nonexistent screen name if the screen name is blank
+		$screen_name = ( $this->settings['username'] == '' ) ? 'alsdkfj9ausdfj2o3423' : $this->settings['username'];
+
+		try {
+			$tweets = $this->connect->get('statuses/user_timeline', array('screen_name' => $screen_name, 'exclude_replies' => false, 'include_rts' => true, 'count' => 1 ));
+			
+			if ( is_array( $tweets ) ) {
+				$response->status = true;
+			} else {
+				$response->status = false;
+
+				// Do some deducing to see if we can figure out the error.
+				if ( isset( $tweets->errors ) ) {
+					$response->error = $tweets->errors[0]->message;
+				}
+				else {
+					$response->error = $tweets;
+				}
+			}
+
+		}
+		catch( Exception $e ) {
+			$response->status = false;
+			$response->error = $e;
+		}
+
+		return $response;
 	}
 
 	/**

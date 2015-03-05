@@ -1,3 +1,3 @@
-.spinner { margin: 8em auto 0 auto; background: url("img/ajax-loader.gif"); width: 43px; height: 11px; }
+.spinner { margin: 8em auto 0 auto; background: url("img/ajax-loader.gif"); background-repeat: no-repeat; width: 43px; height: 11px; }
 
 .spinner > div { visibility: hidden; }

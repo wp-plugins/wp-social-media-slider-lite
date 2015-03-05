@@ -51,6 +51,13 @@ class Wpsms_Post {
 	 public $username;
 
 	/**
+	 * The user's display name
+	 *
+	 * @since    0.9.1
+	 */
+	 public $display_name;
+
+	/**
 	 * The url of the user's social media page
 	 *
 	 * @since    0.9.1
@@ -96,6 +103,7 @@ class Wpsms_Post {
 		$this->date = ( isset( $attrs['date'] ) ) ? $attrs['date'] : '' ;
 		$this->type = ( isset( $attrs['type'] ) ) ? $attrs['type'] : '' ;
 		$this->username = ( isset( $attrs['username'] ) ) ? $attrs['username'] : '' ;
+		$this->display_name = ( isset( $attrs['display_name'] ) ) ? $attrs['display_name'] : '' ;
 		$this->user_url = ( isset( $attrs['user_url'] ) ) ? $attrs['user_url'] : '' ;
 		$this->url = ( isset( $attrs['url'] ) ) ? $attrs['url'] : '' ;
 		$this->link = ( isset( $attrs['link'] ) ) ? $attrs['link'] : '' ;

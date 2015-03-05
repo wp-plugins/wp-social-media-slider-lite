@@ -85,7 +85,7 @@ class Wpsms {
 	public function __construct() {
 
 		$this->plugin_name = 'wp-social-media-slider-lite';
-		$this->version = '1.1.1';
+		$this->version = '1.1.2';
 		$this->settings = $this->set_default_settings( get_option('wpsms_settings', array() ) );
 
 		$this->load_dependencies();
@@ -257,6 +257,10 @@ class Wpsms {
 		// Add the action link to the plugins page
 		$plugin_basename = plugin_basename( plugin_dir_path( realpath( dirname( __FILE__ ) ) ) . $this->plugin_name . '.php' );
 		$this->loader->add_filter( 'plugin_action_links_' . $plugin_basename, $plugin_admin, 'add_action_links' );
+
+		// Clear the post cache when settings are saved
+		$this->loader->add_action('load-settings_page_wp-social-media-slider-lite',$plugin_admin, 'clear_post_cache' );
+
 	}
 
 	/**

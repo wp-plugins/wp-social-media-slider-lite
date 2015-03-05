@@ -281,6 +281,20 @@ class Wpsms_Admin {
 
 	}
 
+	/**
+	 * Clear the post cache when the settings are updated
+	 *
+	 * @since   1.1.2
+	 * @return  void
+	 */
+	function clear_post_cache()
+	{
+	  if( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'])
+	   {
+	      update_option( 'wpsms_time_of_last_refresh', '0' );
+	   }
+	}
+
 
 	/**
 	 * Register the stylesheets for the Dashboard.

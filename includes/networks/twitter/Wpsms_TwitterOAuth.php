@@ -12,7 +12,7 @@ require_once('OAuth.php');
 /**
  * Twitter OAuth class
  */
-class TwitterOAuth {
+class Wpsms_TwitterOAuth {
   /* Contains the last HTTP status code returned. */
   public $http_code;
   /* Contains the last API call. */
@@ -54,7 +54,7 @@ class TwitterOAuth {
   function lastAPICall() { return $this->last_api_call; }
 
   /**
-   * construct TwitterOAuth object
+   * construct Wpsms_TwitterOAuth object
    */
   function __construct($consumer_key, $consumer_secret, $oauth_token = NULL, $oauth_token_secret = NULL) {
     $this->sha1_method = new OAuthSignatureMethod_HMAC_SHA1();

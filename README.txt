@@ -1,13 +1,13 @@
-=== WP Social Media Slider ===
+=== WP Social Media Slider Lite ===
 Contributors: laternastudio
 Tags: social, feed, slider, social media, facebook, twitter, instagram, latest tweets
 Requires at least: 3.0.1
-Tested up to: 4.1
-Stable tag: 1.1.2
+Tested up to: 4.1.1
+Stable tag: 1.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Easily display your latest Twitter posts in a responsive slider.
+Easily display your latest tweets in a responsive slider.
 
 == Description ==
 
@@ -64,6 +64,11 @@ Ordinarily, connecting plugins like this to Twitter can be a real pain. In order
 2. /assets/screenshot-2.png
 
 == Changelog ==
+
+= 1.1.3 =
+* Fixed a conflict that occured if another theme or plugin was loading TwitterOAuth
+* Added shortcode parameters for overriding social media options
+* Improved compatibility with PHP 5.2.x
 
 = 1.1.2 =
 * The post cache is forced to refresh if settings were updated

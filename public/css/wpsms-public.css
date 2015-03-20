@@ -199,9 +199,17 @@ img.mfp-img { width: auto; max-width: 100%; height: auto; display: block; line-h
 .wpsms .wpsms-item .wpsms-meta-info a, .wpsms .wpsms-item .wpsms-meta-info p { display: block; line-height: 1.5em; text-align: left; }
 .wpsms .wpsms-item .wpsms-meta-info a { font-weight: bold; text-decoration: none; border-bottom: 0; }
 .wpsms .wpsms-item .wpsms-meta-info p { text-transform: uppercase; font-size: 0.85em; font-style: italic; margin-bottom: 0; }
+.wpsms .wpsms-item .wpsms-icon-facebook.wpsms-meta-info:before { width: 1.1em; }
 .wpsms .wpsms-item a { border-bottom: 0; }
 .wpsms .wpsms-item .wpsms-image { height: 5.4em; width: 5.4em; float: left; padding-top: 0.35em; overflow: hidden; perspective: 1px; -moz-background-clip: padding; -o-background-clip: padding-box; -webkit-background-clip: padding; background-clip: padding-box; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; }
 .wpsms .wpsms-item .wpsms-image img { width: 100%; border-radius: 3px; }
+.wpsms .wpsms-item.wpsms-facebook .wpsms-fb-link { margin-top: 0.5em; border: 1px solid #d7d7d7; padding: 0.5em; max-width: 100%; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
+.wpsms .wpsms-item.wpsms-facebook .wpsms-fb-link p { padding-bottom: 0; }
+.wpsms .wpsms-item.wpsms-facebook .wpsms-fb-link span { padding: 0px !important; margin: 0px !important; clear: both; height: 0px !important; display: block; }
+.wpsms .wpsms-item.wpsms-facebook .wpsms-fb-video-link { margin-top: 0.5em; border: 1px solid #d7d7d7; padding: 0.5em; max-width: 100%; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
+.wpsms .wpsms-item.wpsms-facebook .wpsms-fb-video-link a { text-decoration: none; }
+.wpsms .wpsms-item.wpsms-facebook .wpsms-fb-video-link p { padding-bottom: 0; }
+.wpsms .wpsms-item.wpsms-facebook .wpsms-fb-video-link span { padding: 0px !important; margin: 0px !important; clear: both; height: 0px !important; display: block; }
 
 .wpsms .owl-next:before { content: 'a'; position: relative; right: -1.5em; }
 @media handheld, only screen and (min-width: 1200px) { .wpsms .owl-next:before { right: -2em; } }
@@ -215,6 +223,10 @@ img.mfp-img { width: auto; max-width: 100%; height: auto; display: block; line-h
 .wpsms-icon-right-open-big:before { content: "a"; }
 
 .wpsms-icon-left-open-big:before { content: "b"; }
+
+.wpsms-icon-facebook:before { content: "c"; text-indent: -5px; }
+
+.wpsms-icon-instagram:before { content: "d"; }
 
 .wpsms-icon-twitter:before { content: "e"; }
 

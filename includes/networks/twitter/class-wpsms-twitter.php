@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__ . "/../class-wpsms-base-network.php";
+require_once dirname(__FILE__) . "/../class-wpsms-base-network.php";
 
 // Load Twitter class
-require_once('TwitterOAuth.php');
+require_once('Wpsms_TwitterOAuth.php');
 
 /**
 * Load recent posts from Facebook
@@ -42,7 +42,7 @@ class Wpsms_Twitter extends Wpsms_Base_Network {
         parent::__construct( $plugin_name, $settings, $log );
 
 		// Create the connection
-		$this->connect = new TwitterOAuth(
+		$this->connect = new WPSMS_TwitterOAuth(
 			$this->settings['consumer_key'],
 			$this->settings['consumer_key_secret'],
 			$this->settings['access_token'],
@@ -87,7 +87,16 @@ class Wpsms_Twitter extends Wpsms_Base_Network {
 	 * @since   1.0.6
 	 * @return  array  an array of post objects
 	 */
-	public function get_posts( $count ) {
+	public function get_posts( $count, $shortcode_atts ) {
+
+		// Override default settings with shortcode atts
+		if( is_array( $shortcode_atts ) && array_key_exists( 'twitter_username', $shortcode_atts ) ) {
+			$this->settings['username'] = $shortcode_atts['twitter_username'];
+		}
+
+		if( is_array( $shortcode_atts ) && array_key_exists( 'twitter_enable', $shortcode_atts ) ) {
+			$this->settings['enable'] = $shortcode_atts['twitter_enable'];
+		}
 
 		// Grab more tweets than needed just in case there are
 		// a lot of replies and RTs that mess with the count

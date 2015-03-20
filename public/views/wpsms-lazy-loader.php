@@ -19,12 +19,16 @@
 	</script>
 <![endif]-->
 
+<?php
+	$instance_id = ( is_array( $atts ) && array_key_exists( 'id', $atts ) ) ? $atts['id'] : '0';
+?>
+
 <!-- This line is included to prevent the flash of
 	 unstyled icons before the icon font is loaded -->
 <div style="font-family: wpsmsfont;"></div>
 
 <div class="wpsms-container">
-	<div class="wpsms">
+	<div class="wpsms" id="wpsms-<?php echo $instance_id; ?>" >
 
 		<?php for( $i = 0; $i < 10; $i++ ) : ?>
 			<div class="item lazy-load-spinner">
@@ -58,7 +62,7 @@
 				// Or print out the default javascript initializer
 				else {
 					?>
-					$(".wpsms").owlCarousel({
+					$(".wpsms#wpsms-<?php echo $instance_id; ?>").owlCarousel({
 						    loop:true,
 						    margin:40,
 						    nav:true,
@@ -95,8 +99,17 @@
 			// Pause the slider (until it loads)
 			SliderHelper.pause();
 
+			<?php if ( count ( $atts ) > 0 && !empty( $atts ) ) { ?>
+				// The shortcodes variables
+				var wpsms_shortcode_atts = $.parseJSON ( '<?php echo json_encode( $atts ); ?>' );
+			<?php } else { ?>
+				var wpsms_shortcode_atts = {};
+			<?php } ?>
+
+			wpsms_shortcode_atts.url = "<?php echo parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); ?>";
+
 			// Grab the posts via AJAX
-			LazyLoader.loadPosts( SliderHelper );
+			LazyLoader.loadPosts( SliderHelper, wpsms_shortcode_atts );
 
 		});
 

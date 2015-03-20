@@ -85,7 +85,7 @@ class Wpsms {
 	public function __construct() {
 
 		$this->plugin_name = 'wp-social-media-slider-lite';
-		$this->version = '1.1.2';
+		$this->version = '1.1.3';
 		$this->settings = $this->set_default_settings( get_option('wpsms_settings', array() ) );
 
 		$this->load_dependencies();
@@ -111,7 +111,7 @@ class Wpsms {
 		}
 
 		// Add the time of the last update
-		$settings[ 'time_of_last_refresh' ] = get_option( 'wpsms_time_of_last_refresh', '0' );
+		$settings[ 'time_of_last_refresh' ] = get_option( 'wpsms_time_of_last_refresh', '{}' );
 
 		// Delete all empty values
 		foreach ($settings as $key => $setting) {
@@ -125,14 +125,13 @@ class Wpsms {
 			'total_posts'                 => '10',
 			'cache_length'                => 60,
 			'ajax_cache_refresh'          => '0',
-			'post_cache'                  => '0',
 			'display_color'               => '#000000',
 			'auto_play'                   => '0',
 			'omit_shorter_than'           => '40',
 			'limit_length'                => '140',
 			'custom_js_init'              => false,
 			'log_data'                    => '0',
-			'time_of_last_update'         => '0',
+			'time_of_last_update'         => '{}',
 		);
 
 		// Any keys not present will be added with the default value
@@ -172,7 +171,7 @@ class Wpsms {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/networks/twitter/class-wpsms-twitter.php';
 
 		$this->networks = array(
-			'twitter'   => new Wpsms_Twitter( $this->plugin_name, $this->settings, $this->log )
+			'twitter' => new Wpsms_Twitter( $this->plugin_name, $this->settings, $this->log )
 			);
 
 		/**
@@ -259,7 +258,7 @@ class Wpsms {
 		$this->loader->add_filter( 'plugin_action_links_' . $plugin_basename, $plugin_admin, 'add_action_links' );
 
 		// Clear the post cache when settings are saved
-		$this->loader->add_action('load-settings_page_wp-social-media-slider-lite',$plugin_admin, 'clear_post_cache' );
+		$this->loader->add_action('load-settings_page_wp-social-media-slider',$plugin_admin, 'clear_post_cache' );
 
 	}
 
@@ -286,6 +285,7 @@ class Wpsms {
 		$this->loader->add_action( 'wp_ajax_wpsms_refresh_cache', $plugin_public, 'refresh_cache' );
 
 		$this->loader->add_filter( 'wpsms_limit_length', $plugin_public, 'variable_limit_length', 10, 2 );
+
 		add_shortcode( 'wp-social-media-slider', array( $plugin_public, 'display_wp_social_media_slider' ) );
 
 	}

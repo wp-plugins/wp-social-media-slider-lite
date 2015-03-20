@@ -83,7 +83,7 @@ class Wpsms_Public {
 		$this->log         = $log;
 	}
 
-	public function display_wp_social_media_slider() {
+	public function display_wp_social_media_slider( $atts ) {
 
 		if ( function_exists('curl_version') ) {
 			ob_start();
@@ -109,7 +109,9 @@ class Wpsms_Public {
 	 */
 	public function lazy_load_posts() {
 
-		$all_posts      = $this->repo->get_social_media();
+		$shortcode_atts = $_GET['shortcode_atts'];
+
+		$all_posts      = $this->repo->get_social_media( $shortcode_atts );
 		$all_posts_html = array();
 
 		// Get the html for each post based on its social media network
@@ -122,7 +124,7 @@ class Wpsms_Public {
 		// If ajax refreshing is turned off, we'll always tell the system
 		// not to do a cache refresh
 		if ( $this->settings[ 'ajax_cache_refresh' ] == '1' ) {
-			$is_it_time_to_refresh = $this->repo->is_it_time_to_refresh();
+			$is_it_time_to_refresh = $this->repo->is_it_time_to_refresh( $shortcode_atts );
 		}
 		else {
 			$is_it_time_to_refresh = 'Ajax cache refresh is turned off.';
@@ -146,7 +148,9 @@ class Wpsms_Public {
 	 */
 	public function refresh_cache() {
 
-		$refresh = $this->repo->refresh_cache();
+		$shortcode_atts = $_GET['shortcode_atts'];
+
+		$refresh = $this->repo->refresh_cache( $shortcode_atts );
 
 		if ( $refresh ) {
 			$response = array(
@@ -180,18 +184,10 @@ class Wpsms_Public {
 	public function variable_limit_length( $limit, $post ) {
 
 		switch ( $post->type ) {
-			case 'facebook':
-				if ( count( $post->images ) > 0 ) {
-					$limit -= 30;
-				}
-				break;
 			case 'twitter':
 				if ( count( $post->images ) > 0 ) {
 					$limit -= 30;
 				}
-				break;
-			case 'instagram':
-				$limit -= 30;
 				break;
 		}
 

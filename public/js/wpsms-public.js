@@ -5,12 +5,13 @@ var LazyLoader;
 
 	LazyLoader = {
 
-		loadPosts: function( helper ) {
+		loadPosts: function( helper, shortcode_atts ) {
 	        $.ajax({
 	            url: ajaxurl,
 	            dataType: 'json',
 	            data: {
-	                action: "wpsms_lazy_load_posts"
+	                action: "wpsms_lazy_load_posts",
+	                shortcode_atts: shortcode_atts
 	            }
 	        }).done( function(response) {
 
@@ -21,17 +22,18 @@ var LazyLoader;
 				LazyLoader.renderPosts( response.posts, helper );
 
 				if( response.time_to_update == '1' ) {
-					LazyLoader.refreshCache();
+					LazyLoader.refreshCache( shortcode_atts );
 				}
 	        });
 		},
 
-		refreshCache: function() {
+		refreshCache: function( shortcode_atts ) {
 	        $.ajax({
 	            url: ajaxurl,
 	            dataType: 'json',
 	            data: {
-	                action: "wpsms_refresh_cache"
+	                action: "wpsms_refresh_cache",
+	                shortcode_atts: shortcode_atts
 	            }
 	        }).done(function(response) {
 	        	console.log( response.status );

@@ -3,7 +3,7 @@ Contributors: laternastudio
 Tags: social, feed, slider, social media, facebook, twitter, instagram, latest tweets
 Requires at least: 3.0.1
 Tested up to: 4.2.2
-Stable tag: 1.1.4
+Stable tag: 1.1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,9 @@ Ordinarily, connecting plugins like this to Twitter can be a real pain. In order
 2. /assets/screenshot-2.png
 
 == Changelog ==
+
+= 1.1.4 =
+* Fix IE8 icon bug.
 
 = 1.1.4 =
 * Fixed a post cache bug.

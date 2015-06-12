@@ -292,6 +292,7 @@ class Wpsms_Admin {
 	  if( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'])
 	   {
 	      update_option( 'wpsms_time_of_last_refresh', '0' );
+	      //Add the fix.
 	   }
 	}
 
